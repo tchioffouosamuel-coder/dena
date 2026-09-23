@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "prestart": "node scripts/setup-env.js",
     "start": "cd backend && npm install && npm run build && npm run start:prod"
   }
 }
