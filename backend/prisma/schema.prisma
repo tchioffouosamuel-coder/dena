@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum OrderStatus {
+  NOUVELLE
+  EN_PREPARATION
+  LIVREE
+  ANNULEE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         Role     @default(STAFF)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Dish {
+  id          String   @id @default(cuid())
+  day         String
+  name        String
+  description String
+  price       Int
+  imageUrl    String?
+  position    Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+
+  @@index([day])
+  @@map("dishes")
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  customerName  String
+  customerPhone String
+  total         Int
+  status        OrderStatus @default(NOUVELLE)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items         OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  orderId  String
+  dishId   String?
+  name     String
+  price    Int
+  quantity Int
+
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  dish     Dish?  @relation(fields: [dishId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
+}
