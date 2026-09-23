@@ -1,9 +1,4 @@
-git status
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote -v
-git push -u origin main{
+{
   "compilerOptions": {
     "module": "commonjs",
     "declaration": false,
@@ -14,6 +9,7 @@ git push -u origin main{
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -22,5 +18,12 @@ git push -u origin main{
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
