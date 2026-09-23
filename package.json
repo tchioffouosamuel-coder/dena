@@ -3,6 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "cd backend && npm install && npx prisma generate && npm run start:prod"
+    "start": "cd backend && npm install && npm run build && npm run start:prod"
   }
 }
