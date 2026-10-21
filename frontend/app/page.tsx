@@ -8,7 +8,7 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { useCart } from '@/lib/cart-context';
 import { FAQS, OCCASIONS, ORDER_STEPS, RESTAURANT, whatsappLink } from '@/lib/site-content';
 import restaurantFacade from '@/public/images/restaurant-facade.jpg';
-import restaurantLogo from '@/public/images/dena-logo.jpg';
+import restaurantLogo from '@/public/images/dena-logo.png';
 
 const NAVIGATION = [
   { href: '#maison', label: 'La maison' },
@@ -35,7 +35,7 @@ export default function HomePage() {
         <div aria-hidden="true" className="h-1 bg-gradient-to-r from-brand-blue via-brand-green to-brand-amber" />
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-5 sm:px-6 py-4">
           <a href="#accueil" className="flex items-center gap-2 sm:gap-3" aria-label="DENA, retour à l’accueil">
-            <span className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 overflow-hidden rounded-lg bg-black">
+            <span className="w-10 h-10 sm:w-12 sm:h-12 shrink-0">
               <Image src={restaurantLogo} alt="" width={60} height={40} sizes="48px" className="h-full w-full object-contain" />
             </span>
             <span className="leading-tight text-sm sm:text-base">
