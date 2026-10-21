@@ -23,3 +23,11 @@
 body {
   background: #f7f4ec;
 }
+
+main section[id] {
+  scroll-margin-top: 9rem;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}

@@ -8,7 +8,7 @@ const body = Work_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], vari
 
 export const metadata: Metadata = {
   title: 'DENA — Délices des Nations',
-  description: 'Restaurant & service traiteur à Bertoua. Commandez en ligne, réservez votre événement.',
+  description: 'Découvrez le menu de DENA à Bertoua, composez votre commande et préparez vos mariages, fêtes et événements avec notre service traiteur. Contact et devis sur WhatsApp.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
