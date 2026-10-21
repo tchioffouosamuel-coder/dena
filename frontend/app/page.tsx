@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MenuGrid } from '@/components/MenuGrid';
 import { CartDrawer } from '@/components/CartDrawer';
 import { useCart } from '@/lib/cart-context';
 import { FAQS, OCCASIONS, ORDER_STEPS, RESTAURANT, whatsappLink } from '@/lib/site-content';
+import restaurantFacade from '@/public/images/restaurant-facade.jpg';
+import restaurantLogo from '@/public/images/dena-logo.jpg';
 
 const NAVIGATION = [
   { href: '#maison', label: 'La maison' },
@@ -31,7 +34,9 @@ export default function HomePage() {
       <header className="sticky top-0 z-10 border-b border-navy/10 bg-cream/95 backdrop-blur">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 px-5 sm:px-6 py-4">
           <a href="#accueil" className="flex items-center gap-2 sm:gap-3" aria-label="DENA, retour à l’accueil">
-            <span className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-navy text-cream flex items-center justify-center font-display font-semibold text-sm">DENA</span>
+            <span className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 overflow-hidden rounded-lg bg-black">
+              <Image src={restaurantLogo} alt="" width={60} height={40} sizes="48px" className="h-full w-full object-contain" />
+            </span>
             <span className="leading-tight text-sm sm:text-base">
               <span className="block font-semibold text-navy">Délices des Nations</span>
               <span className="block text-[10px] sm:text-xs text-navy/70 mt-1">Restaurant & service traiteur</span>
@@ -70,19 +75,21 @@ export default function HomePage() {
             </div>
             <a href={RESTAURANT.mapUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-block text-sm text-navy/70 underline underline-offset-4">Nous retrouver à {RESTAURANT.address}</a>
           </div>
-          <div className="relative overflow-hidden rounded-[2rem] bg-navy p-7 sm:p-10 text-cream">
-            <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full border border-cream/10" aria-hidden="true" />
-            <div className="pointer-events-none absolute -right-8 -top-12 h-48 w-48 rounded-full border border-cream/10" aria-hidden="true" />
-            <div className="relative">
-              <p className="text-xs font-semibold tracking-[0.22em] uppercase text-cream/70">Bienvenue chez DENA</p>
-              <p className="font-display text-4xl sm:text-5xl leading-tight mt-12 mb-8">Les petits repas.<br />Les grands moments.</p>
-              <div className="space-y-5 border-t border-cream/20 pt-6">
-                <div className="flex gap-4"><span className="text-orange" aria-hidden="true">01</span><div><h2 className="font-semibold">Votre repas au quotidien</h2><p className="text-sm text-cream/75 mt-1">Le menu de la semaine, à découvrir selon les disponibilités.</p></div></div>
-                <div className="flex gap-4"><span className="text-orange" aria-hidden="true">02</span><div><h2 className="font-semibold">Votre événement à imaginer</h2><p className="text-sm text-cream/75 mt-1">Une proposition traiteur à construire avec notre équipe.</p></div></div>
-              </div>
-              <p className="border-t border-cream/20 pt-5 mt-7 text-sm text-cream/75">La satisfaction, notre priorité.</p>
-            </div>
-          </div>
+          <figure className="overflow-hidden rounded-[2rem] bg-navy text-cream">
+            <Image
+              src={restaurantFacade}
+              alt="La façade de Délices des Nations illuminée à la tombée du jour."
+              priority
+              placeholder="blur"
+              sizes="(min-width: 1152px) 491px, (min-width: 1024px) 44vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 40px)"
+              className="aspect-[4/3] h-auto w-full object-cover"
+            />
+            <figcaption className="p-6 sm:p-8">
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-cream/75">Bienvenue chez DENA</p>
+              <h2 className="font-display text-2xl sm:text-3xl leading-tight mt-3">Les petits repas. Les grands moments.</h2>
+              <p className="text-sm text-cream/75 mt-3">Restaurant & service traiteur à Bertoua.<br />La satisfaction, notre priorité.</p>
+            </figcaption>
+          </figure>
         </section>
 
         <section id="maison" aria-labelledby="maison-title" className="border-y border-navy/10 bg-white/65">
@@ -200,7 +207,11 @@ export default function HomePage() {
 
       <footer className="bg-navy text-cream">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 py-10 grid sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] gap-8">
-          <div><p className="font-display text-3xl">DENA</p><p className="mt-2 font-semibold">Délices des Nations</p><p className="mt-3 text-sm text-cream/75 leading-relaxed">Restaurant & service traiteur à Bertoua.<br />La satisfaction, notre priorité.</p></div>
+          <div>
+            <Image src={restaurantLogo} alt="Logo Délices des Nations : un globe posé dans une cuillère." width={176} height={117} sizes="176px" placeholder="blur" className="h-auto w-44 rounded-xl" />
+            <p className="mt-4 font-semibold">Délices des Nations</p>
+            <p className="mt-3 text-sm text-cream/75 leading-relaxed">Restaurant & service traiteur à Bertoua.<br />La satisfaction, notre priorité.</p>
+          </div>
           <nav aria-label="Navigation de pied de page"><p className="font-semibold mb-4">À découvrir</p><ul className="space-y-3 text-sm text-cream/80">{NAVIGATION.map(item => <li key={item.href}><a href={item.href} className="hover:underline underline-offset-4">{item.label}</a></li>)}</ul></nav>
           <div><p className="font-semibold mb-4">Restons en contact</p><a href={RESTAURANT.phoneHref} className="text-sm underline underline-offset-4">{RESTAURANT.phone}</a><p className="text-sm text-cream/75 mt-3">{RESTAURANT.address}</p><a href={QUOTE_URL} target="_blank" rel="noopener noreferrer" className="inline-block text-sm font-semibold mt-5 underline underline-offset-4">Votre devis traiteur <span aria-hidden="true">↗</span></a></div>
         </div>
