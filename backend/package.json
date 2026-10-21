@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run prisma:generate && nest build",
+    "build": "npm run prisma:generate && nest build && npm run build:database",
+    "build:database": "tsc -p tsconfig.seed.json && node scripts/copy-prisma.cjs",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate": "prisma migrate deploy --schema=dist/prisma/schema.prisma",
     "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "prisma:seed": "node dist/prisma/seed.js",
+    "prisma:seed:dev": "ts-node prisma/seed.ts",
+    "test:deployment": "node --test test/deployment.test.cjs"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.4",

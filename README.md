@@ -31,7 +31,7 @@ docker compose up --build
 
 Puis, dans un autre terminal, initialisez la base (une seule fois) :
 ```bash
-docker compose exec backend npx prisma migrate deploy
+docker compose exec backend npm run prisma:migrate
 docker compose exec backend npm run prisma:seed
 ```
 
@@ -39,10 +39,9 @@ docker compose exec backend npm run prisma:seed
 - Espace admin : http://localhost:3000/admin/login
 - API (documentation Swagger) : http://localhost:4000/api/docs
 
-Le compte admin créé par défaut est indiqué dans la sortie de la commande `prisma:seed`
-(email `admin@dena.cm`, mot de passe `ChangeMoi123!` par défaut — **à changer immédiatement**
+Le compte admin initial utilise l’email `admin@dena.cm` et le mot de passe `ChangeMoi123!` par défaut — **à changer immédiatement**
 via les variables `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`, ou en créant un nouvel
-administrateur puis en supprimant celui-ci depuis l'espace Équipe).
+administrateur puis en supprimant celui-ci depuis l'espace Équipe. Le mot de passe n’est pas affiché dans les journaux du seed.
 
 ## Démarrage en local (sans Docker)
 
@@ -52,7 +51,7 @@ cd backend
 cp .env.example .env      # puis éditez DATABASE_URL pour pointer vers votre MySQL
 npm install
 npx prisma migrate dev
-npm run prisma:seed
+npm run prisma:seed:dev
 npm run start:dev
 ```
 
@@ -99,6 +98,44 @@ npm --prefix backend run prisma:migrate
 ```
 
 Le schéma et les migrations de ce dépôt utilisent MySQL. Un journal mentionnant `localhost:5432` correspond à l’ancienne configuration PostgreSQL : déployez les modifications MySQL et configurez `DATABASE_URL` avant de relancer.
+
+### Déploiement du backend sur Hostinger
+
+Avec le répertoire racine `backend`, utilisez `npm run build` pour compiler, `dist` comme répertoire de sortie et `main.js` comme fichier d’entrée.
+La compilation inclut aussi `dist/prisma/schema.prisma`, `dist/prisma/migrations/` et `dist/prisma/seed.js`.
+Les commandes de production utilisent ces fichiers et fonctionnent sans les sources TypeScript ni le dossier `prisma` à la racine du déploiement.
+
+Après avoir redéployé cette version, ouvrez le dossier de l’application Node.js (remplacez le domaine par celui du backend) :
+
+```bash
+cd ~/domains/apide.artischools.com/hbuilds/current/nodejs
+ls dist/prisma/schema.prisma dist/prisma/migrations dist/prisma/seed.js
+```
+
+Dans une session SSH, vérifiez que `DATABASE_URL` est définie. Les variables du processus démarré par l’hébergeur ne sont pas nécessairement exportées dans votre session SSH.
+Si besoin, saisissez l’URL sans l’afficher ni l’inscrire dans l’historique :
+
+```bash
+read -rsp 'DATABASE_URL : ' DATABASE_URL
+export DATABASE_URL
+```
+
+Appliquez ensuite les migrations, puis initialisez la base si nécessaire :
+
+```bash
+npm run prisma:migrate && npm run prisma:seed
+```
+
+Pour choisir le compte administrateur initial, exportez `SEED_ADMIN_EMAIL` et `SEED_ADMIN_PASSWORD` avant le seed.
+Le seed conserve un compte déjà présent et ajoute le menu initial uniquement si la table des plats est vide.
+Utilisez `npm run prisma:seed:dev` pour exécuter le seed depuis les sources en développement.
+
+Pour vérifier les fichiers de déploiement dans un dossier isolé, sans connexion à une base :
+
+```bash
+npm --prefix backend run build
+npm --prefix backend run test:deployment
+```
 
 Recommandation simple et robuste pour démarrer (gratuit ou très peu coûteux, scalable ensuite) :
 

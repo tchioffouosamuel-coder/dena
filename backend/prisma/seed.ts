@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PrismaClient, Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -13,7 +14,7 @@ async function main() {
     await prisma.user.create({
       data: { email: adminEmail, passwordHash, name: 'Administrateur', role: Role.ADMIN },
     });
-    console.log(`Compte admin créé : ${adminEmail} / ${adminPassword} (à changer immédiatement)`);
+    console.log(`Compte admin créé : ${adminEmail}`);
   }
 
   const dishCount = await prisma.dish.count();

@@ -31,7 +31,7 @@ services:
       PORT: 4000
       CORS_ORIGIN: http://localhost:3000
       MEDIA_LOCAL_PATH: ./uploads
-    command: sh -c "npx prisma migrate deploy && node dist/main.js"
+    command: sh -c "npm run prisma:migrate && node dist/main.js"
     ports:
       - "4000:4000"
     volumes:
