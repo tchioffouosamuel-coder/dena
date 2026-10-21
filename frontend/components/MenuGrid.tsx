@@ -25,8 +25,8 @@ export function MenuGrid() {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {dishes.map((dish) => (
-        <article key={dish.id} className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col">
-          <div className="bg-navy text-cream text-xs font-semibold tracking-wide px-4 py-2">{dish.day}</div>
+        <article key={dish.id} className="bg-white border border-brand-blue/15 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+          <div className="bg-brand-green text-navy text-xs font-semibold tracking-wide px-4 py-2">{dish.day}</div>
           <div className="text-5xl text-center py-4">{dish.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={dish.imageUrl} alt={dish.name} className="w-full h-40 object-cover" />
@@ -38,7 +38,7 @@ export function MenuGrid() {
               <span className="font-semibold text-orange">{formatPrice(dish.price)}</span>
               <button
                 onClick={() => cart.add(dish)}
-                className="rounded-full bg-navy text-white text-sm font-medium px-4 py-2 hover:bg-navy/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
+                className="rounded-full bg-brand-blue text-white text-sm font-medium px-4 py-2 hover:bg-brand-blue-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue"
                 aria-label={`Ajouter ${dish.name} au panier`}
               >
                 + Ajouter

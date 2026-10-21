@@ -28,7 +28,7 @@ export default function AdminStaffPage() {
     <section>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-semibold text-navy">Membres de l&apos;équipe</h1>
-        <button onClick={() => setOpen(true)} className="rounded-full bg-navy text-white px-4 py-2 text-sm font-medium">+ Ajouter un accès</button>
+        <button onClick={() => setOpen(true)} className="rounded-full bg-brand-blue text-white hover:bg-brand-blue-dark px-4 py-2 text-sm font-medium">+ Ajouter un accès</button>
       </div>
 
       {isLoading ? (
@@ -73,7 +73,7 @@ export default function AdminStaffPage() {
             {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={() => setOpen(false)} className="rounded-full border px-4 py-2 text-sm">Annuler</button>
-              <button type="submit" className="rounded-full bg-navy text-white px-4 py-2 text-sm font-medium">Créer le compte</button>
+              <button type="submit" className="rounded-full bg-brand-blue text-white hover:bg-brand-blue-dark px-4 py-2 text-sm font-medium">Créer le compte</button>
             </div>
           </form>
         </div>

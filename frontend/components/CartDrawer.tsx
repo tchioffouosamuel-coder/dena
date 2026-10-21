@@ -92,7 +92,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
           <button
             type="submit"
             disabled={submitting || cart.lines.length === 0}
-            className="w-full rounded-full bg-orange text-white font-semibold py-3 disabled:opacity-50"
+            className="w-full rounded-full bg-brand-green text-navy font-semibold py-3 hover:bg-brand-green/80 disabled:opacity-50"
           >
             {submitting ? 'Envoi en cours…' : 'Commander sur WhatsApp'}
           </button>

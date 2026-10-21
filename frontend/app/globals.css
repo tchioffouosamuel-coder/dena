@@ -16,12 +16,15 @@
 
 /* Focus clavier toujours visible (accessibilité) */
 :focus-visible {
-  outline: 3px solid #ef850f;
-  outline-offset: 2px;
+  @apply outline outline-[3px] outline-offset-2 outline-brand-blue;
 }
 
 body {
-  background: #f7f4ec;
+  @apply bg-cream;
+}
+
+::selection {
+  @apply bg-brand-green text-navy;
 }
 
 main section[id] {

@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-navy text-cream flex items-center justify-center font-display font-semibold text-xs">DENA</div>
+            <div className="w-9 h-9 rounded-full bg-brand-blue text-white flex items-center justify-center font-display font-semibold text-xs">DENA</div>
             <strong className="text-navy">Espace équipe</strong>
           </div>
           <div className="flex items-center gap-3 text-sm">
@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={t.href}
               href={t.href}
               className={`rounded-full px-4 py-2 text-sm font-medium border-2 ${
-                pathname === t.href ? 'bg-navy text-white border-navy' : 'text-navy border-navy/30'
+                pathname === t.href ? 'bg-brand-blue text-white border-brand-blue' : 'text-navy border-brand-blue/30'
               }`}
             >
               {t.label}

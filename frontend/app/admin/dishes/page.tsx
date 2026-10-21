@@ -70,7 +70,7 @@ export default function AdminDishesPage() {
     <section>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-semibold text-navy">Menu de la semaine</h1>
-        <button onClick={openCreate} className="rounded-full bg-navy text-white px-4 py-2 text-sm font-medium">+ Ajouter un plat</button>
+        <button onClick={openCreate} className="rounded-full bg-brand-blue text-white hover:bg-brand-blue-dark px-4 py-2 text-sm font-medium">+ Ajouter un plat</button>
       </div>
 
       {isLoading ? (
@@ -120,7 +120,7 @@ export default function AdminDishesPage() {
             </label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={closeForm} className="rounded-full border px-4 py-2 text-sm">Annuler</button>
-              <button type="submit" disabled={uploading} className="rounded-full bg-navy text-white px-4 py-2 text-sm font-medium">Enregistrer</button>
+              <button type="submit" disabled={uploading} className="rounded-full bg-brand-blue text-white hover:bg-brand-blue-dark px-4 py-2 text-sm font-medium">Enregistrer</button>
             </div>
           </form>
         </div>
