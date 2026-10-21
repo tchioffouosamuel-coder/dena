@@ -1,21 +1,22 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: mysql:8.4
     restart: unless-stopped
     environment:
-      POSTGRES_USER: dena_user
-      POSTGRES_PASSWORD: changeme
-      POSTGRES_DB: dena_db
+      MYSQL_ROOT_PASSWORD: changeme_root
+      MYSQL_USER: dena_user
+      MYSQL_PASSWORD: changeme
+      MYSQL_DATABASE: dena_db
     volumes:
-      - dena_db_data:/var/lib/postgresql/data
+      - dena_db_data:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dena_user -d dena_db"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u dena_user -pchangeme"]
       interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 20s
 
   backend:
     build: ./backend
@@ -24,7 +25,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://dena_user:changeme@db:5432/dena_db?schema=public
+      DATABASE_URL: mysql://dena_user:changeme@db:3306/dena_db
       JWT_SECRET: change_this_to_a_long_random_string
       JWT_EXPIRES_IN: 8h
       PORT: 4000

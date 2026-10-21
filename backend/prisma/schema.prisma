@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -35,9 +35,9 @@ model Dish {
   id          String   @id @default(cuid())
   day         String
   name        String
-  description String
+  description String   @db.Text
   price       Int
-  imageUrl    String?
+  imageUrl    String?  @db.VarChar(1024)
   position    Int      @default(0)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())

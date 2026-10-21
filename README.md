@@ -7,13 +7,13 @@ Application de restaurant prête pour la production : site client (menu, panier,
 
 ```
 dena-platform/
-├── backend/     NestJS + Prisma + PostgreSQL — API REST sécurisée
+├── backend/     NestJS + Prisma + MySQL — API REST sécurisée
 ├── frontend/    Next.js 14 (App Router) + TypeScript + Tailwind + React Query
 └── docker-compose.yml
 ```
 
 **Pourquoi cette architecture tient la charge :**
-- Base de données relationnelle (PostgreSQL) avec index sur les champs interrogés souvent (statut de commande, date) — les requêtes restent rapides même avec des dizaines de milliers de commandes.
+- Base de données relationnelle (MySQL) avec index sur les champs interrogés souvent (statut de commande, date) — les requêtes restent rapides même avec des dizaines de milliers de commandes.
 - Backend sans état ("stateless") : chaque requête porte son propre jeton d'authentification (JWT), donc on peut lancer plusieurs instances du backend derrière un répartiteur de charge sans configuration supplémentaire.
 - Le prix de chaque commande est toujours recalculé côté serveur à partir de la base — impossible pour un client de falsifier un total.
 - Séparation nette frontend/backend : le site (Next.js) peut être hébergé sur un CDN mondial (Vercel, Cloudflare Pages) pendant que l'API scale indépendamment.
@@ -49,7 +49,7 @@ administrateur puis en supprimant celui-ci depuis l'espace Équipe).
 **Backend :**
 ```bash
 cd backend
-cp .env.example .env      # puis éditez DATABASE_URL pour pointer vers votre PostgreSQL
+cp .env.example .env      # puis éditez DATABASE_URL pour pointer vers votre MySQL
 npm install
 npx prisma migrate dev
 npm run prisma:seed
@@ -66,20 +66,54 @@ npm run dev
 
 ## Déploiement en production
 
+### Commandes pour un déploiement du backend depuis la racine
+
+Configurez deux étapes distinctes chez l’hébergeur :
+
+- **Compilation** : `npm run build` (installe les dépendances du backend, génère Prisma et compile NestJS).
+- **Démarrage** : `npm start` (lance l’API déjà compilée).
+- **Répertoire de travail** : racine du dépôt ; aucun répertoire de sortie statique.
+
+Ne renseignez pas `npm run start` comme commande de compilation : cette commande lance un serveur permanent et nécessite une base accessible.
+La compilation ne se connecte pas à la base.
+Versionnez aussi `backend/package-lock.json` : la compilation utilise `npm ci`.
+
+Dans les variables d’environnement de l’hébergeur, définissez :
+
+```dotenv
+NODE_ENV=production
+DATABASE_URL=mysql://UTILISATEUR:MOT_DE_PASSE_ENCODE@HOTE_MYSQL:3306/NOM_BASE
+JWT_SECRET=REMPLACER_PAR_UN_SECRET_LONG_ET_ALEATOIRE
+CORS_ORIGIN=https://DOMAINE_DU_FRONTEND
+```
+
+Remplacez les valeurs par celles de votre base MySQL et de votre frontend. Encodez les caractères spéciaux du mot de passe dans l’URL.
+Utilisez l’hôte et le port fournis par votre hébergeur de base de données ; `localhost` convient uniquement si MySQL tourne sur la même machine et est accessible depuis l’application.
+L’application utilise le `PORT` fourni par l’hébergeur, ou `4000` par défaut.
+Les fichiers `.env` existants sont conservés ; en production, aucun modèle `.env.example` n’est copié automatiquement.
+
+Après la compilation, appliquez les migrations depuis un environnement pouvant accéder à MySQL, avant de démarrer l’API :
+
+```bash
+npm --prefix backend run prisma:migrate
+```
+
+Le schéma et les migrations de ce dépôt utilisent MySQL. Un journal mentionnant `localhost:5432` correspond à l’ancienne configuration PostgreSQL : déployez les modifications MySQL et configurez `DATABASE_URL` avant de relancer.
+
 Recommandation simple et robuste pour démarrer (gratuit ou très peu coûteux, scalable ensuite) :
 
 | Composant | Où l'héberger | Pourquoi |
 |---|---|---|
 | Frontend (Next.js) | Vercel | CDN mondial, déploiement automatique à chaque `git push`, gratuit pour démarrer |
-| Backend (NestJS) | Railway ou Render | Déploiement Docker en un clic, montée en charge simple, base PostgreSQL incluse |
-| Base de données | PostgreSQL managé (Railway/Render/Supabase) | Sauvegardes automatiques, pas de maintenance serveur |
+| Backend (NestJS) | Railway ou Render | Déploiement Docker en un clic, montée en charge simple, base MySQL incluse |
+| Base de données | MySQL managé (Railway, Hostinger…) | Sauvegardes automatiques, pas de maintenance serveur |
 | Photos | Cloudflare R2 (compatible S3) | Stockage illimité peu coûteux, à brancher dans `media.service.ts` |
 | Sécurité / CDN | Cloudflare devant le frontend et l'API | Protection DDoS, cache, HTTPS gratuit |
 
 Étapes générales :
 1. Créez un dépôt Git (GitHub/GitLab) avec ce dossier `dena-platform`.
 2. Sur Railway ou Render : nouveau service → pointez vers `/backend` → ajoutez une base
-   PostgreSQL → renseignez les variables d'environnement (voir `backend/.env.example`) →
+   MySQL → renseignez les variables d'environnement (voir `backend/.env.example`) →
    déployez. Notez l'URL publique de l'API (ex: `https://dena-api.up.railway.app`).
 3. Sur Vercel : nouveau projet → pointez vers `/frontend` → variable d'environnement
    `NEXT_PUBLIC_API_URL=https://dena-api.up.railway.app/api` → déployez.
